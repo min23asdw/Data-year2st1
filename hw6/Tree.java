@@ -172,27 +172,27 @@ public class Tree extends BTreePrinter { // Fix this
         // Implement insert() using the non-recursive version
         // This function should call findClosestLeaf()
         if(root!=null){
-        Node n = findClosestLeaf(key);
-        if(n.key!= key){
+          Node n = findClosestLeaf(key);
+          if(n.key!= key){
             if(key > n.key){
-                n.right = new Node(key);
-                n.right.parent = n;
+              n.right = new Node(key);
+              n.right.parent = n;
             }
 
             else {
-                n.left = new Node(key);
-                n.left.parent = n;
+              n.left = new Node(key);
+              n.left.parent = n;
             }
-        }
-        else
-        {
+          }
+          else
+          {
             return;
-        }
+          }
 
         }else{
-            root = new Node(key);
+          root = new Node(key);
         }
-    }
+      }
 
       public void printPreOrderDFT(){
         System.out.print("PreOrder DFT node sequence [ ");
@@ -254,51 +254,102 @@ public class Tree extends BTreePrinter { // Fix this
         }
         else{return;}
       }
-  ////////////////////////////       Q3    ////////////////////////////
+      ////////////////////////////       Q3    ////////////////////////////
 
+      public int height(){ // Tree height
+        // Hint: call the static function
+        if(root!=null){
+          return height(root);
+
+        }
+        else{return -1;}
+      }
       public static int height(Node node){
         // Use recursion to implement this function
         // height = length(path{node->deepest child})
-        return -2;
+        if(node!=null){
+          return 1 + Math.max(height(node.left), height(node.right));
+        }else{
+          return -1;
+        }
+
+      }
+
+      public int size(){ // Tree size
+        // Hint: call the static function
+        if(root!=null){
+          return size(root);
+        }
+        else{
+          return 0;
+        }
       }
 
       public static int size(Node node){
         // Use recursion to implement this function
         // size = #children + 1(itself)
-        return -2;
+        if(node!=null){
+
+            return 1 + size(node.left) + size(node.right);
+
+        }
+        else{
+          return 0;
+        }
+      }
+
+      public int depth(){ // Tree depth
+        // Hint: call the static function
+        if(root!=null){
+          return height(root);
+        }
+        else {return -1;}
       }
 
       public static int depth(Node root, Node node){
         // Use recursion to implement this function
         // Similar to height() but start from node, go up to root
         // depth = length(path{node->root})
-        return -2;
+        if(node!=root){
+          return 1 +  depth (root,node.parent) ;
+
+        }
+          else {
+            return 0;
+          }
 
       }
 
-      public int height(){ // Tree height
-        // Hint: call the static function
-        return -2;
-      }
-
-      public int size(){ // Tree size
-        // Hint: call the static function
-        return -2;
-      }
-
-      public int depth(){ // Tree depth
-        // Hint: call the static function
-        return -2;
-      }
 
       public Node findKthSmallest(int k){
-        return null; // Call the recursive version
+        if(root!=null){
+
+          return findKthSmallest(root,k);
+        }
+        else {
+          return null;
+          }
       }
 
       public static Node findKthSmallest(Node node, int k){
         // this function should be recursive
-        return null;
+        if(node!=null){
+          int l = size(node.left);
+          if(k==l+1){
+            return node;
+          }else if(k<l+1){
+            return findKthSmallest(node.left,k);
+          }else{
+            return findKthSmallest(node.right,k-l-1);
+          }
+        }
+          else {
+            return null;
+          }
+
       }
+
+////////////////////////////       Q4    ////////////////////////////
 
       public static Node findNext(Node node){
         //this function should call other functions
