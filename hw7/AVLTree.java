@@ -235,7 +235,7 @@ public class AVLTree extends BTreePrinter{
     int balanceFactor = 0;              // Calculate balanceFactor
     Node current = node;
 
-    while(Math.abs(height(current.left)-height(current.right)) < 1 && current.parent!=null){
+    while(current.parent!=null){
       if(Math.abs(height(current.left)-height(current.right)) > 1){
         break;
       }
@@ -308,7 +308,38 @@ public class AVLTree extends BTreePrinter{
   // This function is for deleting the root node
   // If the node is not the root, please call the recursive version
   public void delete(int key) {
-    // Pls copy the code from the previous homework
+    // There should be 6 cases here
+    // Non-root nodes should be forwarded to the static function
+    if(root == null) {
+      System.out.println("Empty Tree!!!");  // ไม่มี node ใน tree
+    }
+    else{
+      //////////////////////////
+      Node node = find(key);
+      /////////////////////////
+      if (node == null) System.out.println("Key not found!!!");   //ไม่เจอ  node
+
+
+
+      else if(node == root){          //ตัวที่ลบเป็น root
+        if (root.left == null && root.right == null) {  //ใน tree มีแค่ root ตัสเดียว ก็หายไปสิ จะรอไร
+          root = null;
+        }
+        else if (root.left != null && root.right == null) {  //่ root มีลูกฝั่งซ้าย   เอาตัวลูกขึ้นมาแทน
+          root.left.parent = null;
+          root = root.left;
+        }
+        else {   //่ root มีลูกฝั่งขวา   เอาตัวลูกขึ้นมาแทน
+          Node child = findMin(root.right);
+          root.key = child.key;
+          delete(this,child);
+        }
+
+      }
+      else {  //ตัวที่ลบไม่ใช่ root
+        delete(this,node);
+      }
+    }
   }
 
   // Use this function to delete non-root nodes
@@ -316,6 +347,52 @@ public class AVLTree extends BTreePrinter{
   public static void delete(AVLTree tree, Node node){
     // Pls copy the code from the previous homework
     // Add code segments to enable the rebalancing feature
+    // recive node cant be root
+    ///////////////////////////
+    Node temp = new Node(0);
+    ///////////////////////////
+    if (node == null) return;
+
+    if(node.left!=null && node.right!=null){ // full node case // หา min ของ right-subtree เอา key มาเขียนทับ key ของ node เลย
+      Node n = findMin(node.right);
+      node.key = n.key;
+      delete(tree,n);
+    }
+    else { // none full node
+
+      if(node.left!=null&&node.right==null){   // node have left subtree
+        temp.left = node.left;
+        node.left.parent = node.parent;
+      }else {
+        temp.left = null;
+      }
+
+      if(node.left==null&&node.right!=null){  // node have right subtree
+        temp.left = node.right;
+        node.right.parent = node.parent;
+      }else {
+        temp.left = null;
+      }
+
+
+      if(node.key < node.parent.key){   //node are left subtree
+        node.parent.left = temp.left;
+
+      }else {  //node are right subtree
+        node.parent.right = temp.left;
+      }
+
+      
+    }
+
+    Node now = node.parent;
+    while(now.parent!=null){
+      rebalance(tree, now);
+
+      now = now.parent;
+    }
+
+
   }
 
   public Node find(int search_key) {
