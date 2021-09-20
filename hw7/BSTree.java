@@ -232,43 +232,181 @@ public class BSTree extends BTreePrinter{
 
   public Node find(int search_key) {
     // Pls copy the code from the previous homework
-    return null; // Fix this
+
+    if(root!=null){
+      return  find(root,search_key);
+    }else {
+      return  null;
+    }
+
   }
 
   public static Node find(Node node, int search_key) {
     // Pls copy the code from the previous homework
-    return null; // Fix this
+    if (node!=null) {
+      if(node.key==search_key){
+        return  node;
+      }
+      if(node.key > search_key){
+        return insert(node.left);
+      }else {
+        return insert(node.right);
+      }
+    }else {
+      return null;
+    }
+
   }
 
   public static Node findMin(Node node){
     // Pls copy the code from the previous homework
-    return null; // Fix this
+    if(node!=null){
+      if(node.left!=null){
+        return findMin(node.left);
+      }else{
+        return node;
+      }
+    }else {
+      return null;
+    }
+
   }
 
   public static Node findMax(Node node){
     // Pls copy the code from the previous homework
-    return null; // Fix this
-  }
-
-  public void insert(int key) {
-    // Pls copy the code from the previous homework
+    if(node!=null){
+      if(node.right!=null){
+        return findMax(node.right);
+      }else{
+        return node;
+      }
+    }else {
+      return null;
+    }
   }
 
   public static void insert(Node node, int key) {
-    // Pls copy the code from the previous homework
+    if (key == node.key) {
+      System.out.println("Duplicated key:" + key);
+    }else if (key < node.key) {//Go left
+      if (node.left == null) {
+        node.left = new Node(key);
+        node.left.parent = node;
+      }else {
+        insert(node.left, key);
+
+
+      }
+    }else{  // Go right
+      if (node.right == null) {
+        node.right = new Node(key);
+        node.right.parent = node;
+      }else {
+        insert(node.right, key);
+
+
+      }
+    }
+  }
+
+  // This function is complete, no need to edit
+  public void insert(int key) {
+    if (root == null) {
+      root = new Node(key);
+    } else {
+      insert(root, key);
+    }
   }
 
   public void delete(int key) {
-    // Pls copy the code from the previous homework
+    // There should be 6 cases here
+    // Non-root nodes should be forwarded to the static function
+    if(root == null) {
+      System.out.println("Empty Tree!!!");  // ไม่มี node ใน tree
+    }
+    else{
+      //////////////////////////
+      Node node = find(key);
+      /////////////////////////
+      if (node == null) System.out.println("Key not found!!!");   //ไม่เจอ  node
+
+
+
+      else if(node == root){          //ตัวที่ลบเป็น root
+        if (root.left == null && root.right == null) {  //ใน tree มีแค่ root ตัสเดียว ก็หายไปสิ จะรอไร
+          root = null;
+        }
+        else if (root.left != null && root.right == null) {  //่ root มีลูกฝั่งซ้าย   เอาตัวลูกขึ้นมาแทน
+          root.left.parent = null;
+          root = root.left;
+        }
+        else {   //่ root มีลูกฝั่งขวา   เอาตัวลูกขึ้นมาแทน
+          Node child = findMin(root.right);
+          root.key = child.key;
+          delete(this,child);
+        }
+
+      }
+      else {  //ตัวที่ลบไม่ใช่ root
+        delete(this,node);
+      }
+    }
   }
 
-  public static void delete(Node node){
+  // Use this function to delete non-root nodes
+  // Also, fix the code to have the rebalancing feature
+  public static void delete( Node node){
     // Pls copy the code from the previous homework
+    // Add code segments to enable the rebalancing feature
+    // recive node cant be root
+    ///////////////////////////
+    Node temp = new Node(0);
+    ///////////////////////////
+    if (node == null) return;
+
+    if(node.left!=null && node.right!=null){ // full node case // หา min ของ right-subtree เอา key มาเขียนทับ key ของ node เลย
+      Node n = findMin(node.right);
+      node.key = n.key;
+      delete(n);
+    }
+    else { // none full node
+
+      if(node.left!=null&&node.right==null){   // node have left subtree
+        temp.left = node.left;
+        node.left.parent = node.parent;
+      }else {
+        temp.left = null;
+      }
+
+      if(node.left==null&&node.right!=null){  // node have right subtree
+        temp.left = node.right;
+        node.right.parent = node.parent;
+      }else {
+        temp.left = null;
+      }
+
+
+      if(node.key < node.parent.key){   //node are left subtree
+        node.parent.left = temp.left;
+
+      }else {  //node are right subtree
+        node.parent.right = temp.left;
+      }
+
+
+    }
+
   }
 
   public static boolean isMergeable(Node r1, Node r2){
-    return false;// Fix this
+    if(findMax(r1) < findMin(r2) ){
+      return true;
+    }else{
+      return false;// Fix this
+    }
+
   }
+
 
   public static Node mergeWithRoot(Node r1, Node r2, Node t){
     if (isMergeable(r1, r2)) {
