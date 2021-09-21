@@ -363,14 +363,12 @@ public class AVLTree extends BTreePrinter{
       if(node.left!=null&&node.right==null){   // node have left subtree
         temp.left = node.left;
         node.left.parent = node.parent;
-      }else {
-        temp.left = null;
       }
-
-      if(node.left==null&&node.right!=null){  // node have right subtree
+      else if(node.left==null&&node.right!=null){  // node have right subtree
         temp.left = node.right;
         node.right.parent = node.parent;
-      }else {
+      }
+      else{
         temp.left = null;
       }
 
@@ -382,7 +380,7 @@ public class AVLTree extends BTreePrinter{
         node.parent.right = temp.left;
       }
 
-      
+
     }
 
     Node now = node.parent;

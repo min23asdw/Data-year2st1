@@ -248,9 +248,9 @@ public class BSTree extends BTreePrinter{
         return  node;
       }
       if(node.key > search_key){
-        return insert(node.left);
+        return find(node.left,search_key);
       }else {
-        return insert(node.right);
+        return find(node.right,search_key);
       }
     }else {
       return null;
@@ -343,12 +343,12 @@ public class BSTree extends BTreePrinter{
         else {   //่ root มีลูกฝั่งขวา   เอาตัวลูกขึ้นมาแทน
           Node child = findMin(root.right);
           root.key = child.key;
-          delete(this,child);
+          delete(child);
         }
 
       }
       else {  //ตัวที่ลบไม่ใช่ root
-        delete(this,node);
+        delete(node);
       }
     }
   }
@@ -374,14 +374,12 @@ public class BSTree extends BTreePrinter{
       if(node.left!=null&&node.right==null){   // node have left subtree
         temp.left = node.left;
         node.left.parent = node.parent;
-      }else {
-        temp.left = null;
       }
-
-      if(node.left==null&&node.right!=null){  // node have right subtree
+      else if(node.left==null&&node.right!=null){  // node have right subtree
         temp.left = node.right;
         node.right.parent = node.parent;
-      }else {
+      }
+      else{
         temp.left = null;
       }
 
@@ -391,6 +389,7 @@ public class BSTree extends BTreePrinter{
 
       }else {  //node are right subtree
         node.parent.right = temp.left;
+
       }
 
 
@@ -399,7 +398,7 @@ public class BSTree extends BTreePrinter{
   }
 
   public static boolean isMergeable(Node r1, Node r2){
-    if(findMax(r1) < findMin(r2) ){
+    if(findMax(r1).key < findMin(r2).key ){
       return true;
     }else{
       return false;// Fix this
@@ -411,7 +410,13 @@ public class BSTree extends BTreePrinter{
   public static Node mergeWithRoot(Node r1, Node r2, Node t){
     if (isMergeable(r1, r2)) {
       // Fix this
-      return null;
+      Node mergeroot = t;
+      mergeroot.left = r1;
+      r1.parent = mergeroot;
+
+      mergeroot.right = r2;
+      r2.parent = mergeroot;
+      return mergeroot;
     } else {
       System.out.println("All nodes in T1 must be smaller than all nodes from T2");
       return null;
@@ -420,7 +425,25 @@ public class BSTree extends BTreePrinter{
 
   public void merge(BSTree tree2){
     if (isMergeable(this.root, tree2.root)){
-      // Do something
+       Node maxleft = findMax(this.root);
+
+       delete( findMax(this.root) );
+
+       Node temp = this.root;
+
+       this.root = maxleft;
+       maxleft.parent = null;
+
+       maxleft.left = temp;
+       maxleft.left.parent = maxleft;
+
+
+
+
+       maxleft.right = tree2.root;
+       tree2.root.parent = maxleft;
+
+
     }else{
       System.out.println("All nodes in T1 must be smaller than all nodes from T2");
     }
