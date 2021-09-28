@@ -456,24 +456,36 @@ public class AVLTree extends BTreePrinter{
   public static boolean isMergeable(Node r1, Node r2){
         if (r1 != null && r2 == null) return true;
         if(r1 == null && r2 != null) return true;
-        return findMax(r1).key < findMin(r2).key;
+        if(r1 == null && r2 == null) return true;
+        if(  findMax(r1).key < findMin(r2).key && Math.abs( height(r1) - height(r2) )<=1   ){
+          return true;
+        }else if (Math.abs( height(r1) - height(r2) ) > 1 ){
+          return false;
+        }
+        else{
+          System.out.println("All nodes in T1 must be smaller than all nodes from T2");
+          return false;
+        }
+
+  
 
   }
 
 
   public  static Node mergeWithRoot(Node r1, Node r2, Node t){
     ///////////////////////////////////////////////////////////////////////////// this Fn
+    System.out.println(isMergeable(r1, r2));
     if (r1 == null && r2 == null) {
         return t;
     }
     // AVLTree caller = new AVLTree(r1);
 
     if (isMergeable(r1, r2)) {
+  
 
         int diff = height(r1) - height(r2);
 
         if (Math.abs(diff) <= 1) {
-           System.out.println("rrrar");
             t.left = r1;
             t.right = r2;
             if (r1 != null) {r1.parent = t;}
@@ -502,8 +514,13 @@ public class AVLTree extends BTreePrinter{
 
         return t;
     } else {
-      System.out.println("All nodes in T1 must be smaller than all nodes from T2");
-      return null;
+      if(height(r1) < height(r2) ){
+        System.out.println("ia 1");
+        return  mergeWithRoot(r1, r2.left, t);
+      }else{
+        System.out.println("ia 2");
+        return  mergeWithRoot(r1.right, r2, t);
+      }
     }
   }
 
@@ -515,9 +532,6 @@ public class AVLTree extends BTreePrinter{
       delete( this ,findMax(this.root) );
 
       this.root = mergeWithRoot(this.root, tree2.root ,maxleft);
-      //  rebalance(this, this.root);
-    }else{
-      System.out.println("All nodes in T1 must be smaller than all nodes from T2");
     }
   }
 
@@ -525,10 +539,8 @@ public class AVLTree extends BTreePrinter{
 
   // Fix this function
   public Node[] split(int key){
-    // return new Node[2]; // This is incorrect, fix this by calling the static split
 
       return split(root, key);
-
 
 
   }
@@ -536,7 +548,24 @@ public class AVLTree extends BTreePrinter{
   // Fix this function
   public static Node[] split(Node r, int key){
     Node[] arr = new Node[2];
-   
+
+    if (r == null) {
+      arr[0] = null;
+      arr[1] = null;
+      return arr;
+  }
+  else if (key < r.key) {
+    arr= split(r.left, key);
+      arr[1] = mergeWithRoot(arr[1], r.right, r);
+    
+      return arr;
+  }
+  else if (key >= r.key) {
+    arr = split(r.right, key);
+    arr[0] = mergeWithRoot(r.left,arr[0], r);
+    // System.out.println(arr[1].key);
+    return arr;
+  }
     return arr;
   }
 
