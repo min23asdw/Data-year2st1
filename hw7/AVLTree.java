@@ -514,7 +514,7 @@ public class AVLTree extends BTreePrinter{
 
       delete( this ,findMax(this.root) );
 
-      mergeWithRoot(this.root, tree2.root ,maxleft);
+      this.root = mergeWithRoot(this.root, tree2.root ,maxleft);
       //  rebalance(this, this.root);
     }else{
       System.out.println("All nodes in T1 must be smaller than all nodes from T2");
