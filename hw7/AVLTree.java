@@ -100,6 +100,8 @@ public class AVLTree extends BTreePrinter{
     // Do something
     if(y!=null){
       if(y.parent!=null){  // y not root
+        System.out.println("hey y" + y.key);
+        System.out.println("hey y.parent" + y.parent.key);
         Node w = y.parent;
         if(y.left!=null){
           Node x = y.left;
@@ -169,8 +171,8 @@ public class AVLTree extends BTreePrinter{
     // Do something
     if(y!=null){
       if(y.parent!=null){ // y not root
-        System.out.println("hey y" + y.key);
-        System.out.println("hey y.parent" + y.parent.key);
+        // System.out.println("hey y" + y.key);
+        // System.out.println("hey y.parent" + y.parent.key);
         Node w =y.parent;
         if(y.right!=null){
           Node x = y.right;
@@ -485,7 +487,6 @@ public class AVLTree extends BTreePrinter{
     // AVLTree caller = new AVLTree(r1);
 
     if (isMergeable(r1, r2)) {
-  
 
         int diff = height(r1) - height(r2);
 
@@ -497,7 +498,7 @@ public class AVLTree extends BTreePrinter{
             return t;
         }
         else if (diff > 0) {
-
+          
             Node temp = mergeWithRoot(r1.right, r2, t);
             r1.right = temp;
 
@@ -511,7 +512,7 @@ public class AVLTree extends BTreePrinter{
             return caller.root;
         }
         else if (diff < 0) {
-          
+              
             Node temp = mergeWithRoot(r1, r2.left, t);
 
             r2.left = temp;
@@ -552,24 +553,36 @@ public class AVLTree extends BTreePrinter{
   // Fix this function
   public static Node[] split(Node r, int key){
     Node[] arr = new Node[2];
-
     if (r == null) {
       arr[0] = null;
+      // if(arr[0]!=null)arr[0].parent =null;
       arr[1] = null;
+      // if(arr[1]!=null)arr[1].parent = null;
       return arr;
   }
   else if (key < r.key) {
     arr= split(r.left, key);
+    // arr[0].parent =null;
+    // arr[1].parent =null;
+    // r.parent = null;
+if(arr[1]!=null) arr[1].parent = null;
+if(r.right!=null)    r.right.parent = null;
+
+
       arr[1] = mergeWithRoot(arr[1], r.right, r);
-    
+
       return arr;
   }
   else if (key >= r.key) {
     arr = split(r.right, key);
-    System.out.println("r.leftr.left   " + r.left.key);
-    if(key == r.key){
-      r.left.parent = null;
-    }
+    if(arr[0]!=null) arr[0].parent = null;
+    if(r.left!=null)    r.left.parent = null;
+    // r.parent = null;
+ 
+    // System.out.println("r.leftr.left   " + r.left.key);
+    // if(r.key== key){
+    //   r.left.parent = null;
+    // }
     arr[0] = mergeWithRoot(r.left,arr[0], r);
     // System.out.println(arr[1].key);
     return arr;
