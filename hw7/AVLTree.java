@@ -457,10 +457,9 @@ public class AVLTree extends BTreePrinter{
         if (r1 != null && r2 == null) return true;
         if(r1 == null && r2 != null) return true;
         if(r1 == null && r2 == null) return true;
-        if(  findMax(r1).key < findMin(r2).key && Math.abs( height(r1) - height(r2) )<=1   ){
+        if(  findMax(r1).key < findMin(r2).key   ){
+          
           return true;
-        }else if (Math.abs( height(r1) - height(r2) ) > 1 ){
-          return false;
         }
         else{
           System.out.println("All nodes in T1 must be smaller than all nodes from T2");
@@ -493,17 +492,23 @@ public class AVLTree extends BTreePrinter{
             return t;
         }
         else if (diff > 0) {
-          // System.out.println("rrr");
-
+          System.out.println("ll");
+          System.out.println("t " + t.key);
+          System.out.println("r1 " + r1.key);
+          System.out.println("r1 R  " + r1.right.key);
             Node temp = mergeWithRoot(r1.right, r2, t);
             r1.right = temp;
+            System.out.println("r1.right" + r1.right.key);
             temp.parent = r1;
             AVLTree caller = new AVLTree(r1);
-           rebalance(caller , r1);
+            rebalance(caller , r1);
             return caller.root;
         }
         else if (diff < 0) {
+          System.out.println("rrr");
+          
             Node temp = mergeWithRoot(r1, r2.left, t);
+
             r2.left = temp;
             temp.parent = r2;
             AVLTree caller = new AVLTree(r2);
@@ -514,13 +519,7 @@ public class AVLTree extends BTreePrinter{
 
         return t;
     } else {
-      if(height(r1) < height(r2) ){
-        System.out.println("ia 1");
-        return  mergeWithRoot(r1, r2.left, t);
-      }else{
-        System.out.println("ia 2");
-        return  mergeWithRoot(r1.right, r2, t);
-      }
+      return null;
     }
   }
 
