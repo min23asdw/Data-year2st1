@@ -462,7 +462,7 @@ public class AVLTree extends BTreePrinter{
 
 
   public  static Node mergeWithRoot(Node r1, Node r2, Node t){
-    
+    ///////////////////////////////////////////////////////////////////////////// this Fn
     if (r1 == null && r2 == null) {
         return t;
     }
