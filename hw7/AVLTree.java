@@ -1,6 +1,10 @@
 public class AVLTree extends BTreePrinter{
   Node root;
 
+  public AVLTree(Node root){
+    this.root = root;
+}
+
   public void singleRotateFromLeft(Node y) {
     if(y!= null){
       if(y.left!=null){
@@ -232,8 +236,9 @@ public class AVLTree extends BTreePrinter{
   }
 
   public static void rebalance(AVLTree tree, Node node){
-    int balanceFactor = 0;              // Calculate balanceFactor
     Node current = node;
+    int balanceFactor = Math.abs(height(current.left)-height(current.right));              // Calculate balanceFactor
+    
 
     while(current.parent!=null){
       if(Math.abs(height(current.left)-height(current.right)) > 1){
@@ -242,7 +247,7 @@ public class AVLTree extends BTreePrinter{
       current = current.parent;
     }
 
-    if ( Math.abs(height(current.left)-height(current.right)) > 1 ){                          // if diff more 1  =  unbalanced
+    if ( balanceFactor > 1 ){                          // if diff more 1  =  unbalanced
 
       if (   height(current.left) > height(current.right)    ) {                      //left heavy
         if (height(current.left.left)>height(current.left.right)){                  // Use the grandchild to check if Outer or Inner?
@@ -394,57 +399,144 @@ public class AVLTree extends BTreePrinter{
   }
 
   public Node find(int search_key) {
-    // Pls copy the code from the previous problem
-    return null; // Fix this
-  }
+    // Pls copy the code from the previous homework
 
+    if(root!=null){
+      return  find(root,search_key);
+    }else {
+      return  null;
+    }
+
+  }
   public static Node find(Node node, int search_key) {
-    // Pls copy the code from the previous problem
-    return null; // Fix this
+    // Pls copy the code from the previous homework
+    if (node!=null) {
+      if(node.key==search_key){
+        return  node;
+      }
+      if(node.key > search_key){
+        return find(node.left,search_key);
+      }else {
+        return find(node.right,search_key);
+      }
+    }else {
+      return null;
+    }
+
   }
 
-  // This function is complete, no need to edit
   public static Node findMin(Node node){
-    // Pls copy the code from the previous problem
-    return null; // Fix this
+    // Pls copy the code from the previous homework
+    if(node!=null){
+      if(node.left!=null){
+        return findMin(node.left);
+      }else{
+        return node;
+      }
+    }else {
+      return null;
+    }
+
   }
 
   public static Node findMax(Node node){
-    // Pls copy the code from the previous problem
-    return null; // Fix this
+    // Pls copy the code from the previous homework
+    if(node!=null){
+      if(node.right!=null){
+        return findMax(node.right);
+      }else{
+        return node;
+      }
+    }else {
+      return null;
+    }
   }
+
 
   public static boolean isMergeable(Node r1, Node r2){
-    return false;// Fix this
+        if (r1 != null && r2 == null) return true;
+        if(r1 == null && r2 != null) return true;
+        return findMax(r1).key < findMin(r2).key;
+
   }
 
-  public static Node mergeWithRoot(Node r1, Node r2, Node t){
+
+  public  static Node mergeWithRoot(Node r1, Node r2, Node t){
+    
+    if (r1 == null && r2 == null) {
+        return t;
+    }
+    // AVLTree caller = new AVLTree(r1);
+
     if (isMergeable(r1, r2)) {
-      // Fix this
-      return null;
+
+        int diff = height(r1) - height(r2);
+
+        if (Math.abs(diff) <= 1) {
+           System.out.println("rrrar");
+            t.left = r1;
+            t.right = r2;
+            if (r1 != null) {r1.parent = t;}
+            if (r2 != null) {r2.parent = t;}
+            return t;
+        }
+        else if (diff > 0) {
+          // System.out.println("rrr");
+
+            Node temp = mergeWithRoot(r1.right, r2, t);
+            r1.right = temp;
+            temp.parent = r1;
+            AVLTree caller = new AVLTree(r1);
+           rebalance(caller , r1);
+            return caller.root;
+        }
+        else if (diff < 0) {
+            Node temp = mergeWithRoot(r1, r2.left, t);
+            r2.left = temp;
+            temp.parent = r2;
+            AVLTree caller = new AVLTree(r2);
+            
+            rebalance(caller , r2);
+            return caller.root;
+        }
+
+        return t;
     } else {
       System.out.println("All nodes in T1 must be smaller than all nodes from T2");
       return null;
     }
   }
 
+
   public void merge(AVLTree tree2){
     if (isMergeable(this.root, tree2.root)){
-      // Do something
+      Node maxleft = findMax(this.root);
+
+      delete( this ,findMax(this.root) );
+
+      mergeWithRoot(this.root, tree2.root ,maxleft);
+      //  rebalance(this, this.root);
     }else{
       System.out.println("All nodes in T1 must be smaller than all nodes from T2");
     }
   }
 
+
+
   // Fix this function
   public Node[] split(int key){
-    return new Node[2]; // This is incorrect, fix this by calling the static split
+    // return new Node[2]; // This is incorrect, fix this by calling the static split
+
+      return split(root, key);
+
+
+
   }
 
   // Fix this function
   public static Node[] split(Node r, int key){
     Node[] arr = new Node[2];
-    // Do something
+   
     return arr;
   }
 

@@ -408,46 +408,35 @@ public class BSTree extends BTreePrinter{
 
 
   public static Node mergeWithRoot(Node r1, Node r2, Node t){
-    if (isMergeable(r1, r2)) {
-      // Fix this
-      Node mergeroot = t;
-      mergeroot.left = r1;
-      r1.parent = mergeroot;
+  if (isMergeable(r1, r2)) {
+    // Fix this
+    Node mergeroot = t;
+    t.parent = null;
+    mergeroot.left = r1;
+    r1.parent = mergeroot;
 
-      mergeroot.right = r2;
-      r2.parent = mergeroot;
-      return mergeroot;
-    } else {
-      System.out.println("All nodes in T1 must be smaller than all nodes from T2");
-      return null;
-    }
+    mergeroot.right = r2;
+    r2.parent = mergeroot;
+
+    return mergeroot;
+  } else {
+    System.out.println("All nodes in T1 must be smaller than all nodes from T2");
+    return null;
   }
+}
 
-  public void merge(BSTree tree2){
-    if (isMergeable(this.root, tree2.root)){
-       Node maxleft = findMax(this.root);
+public void merge(BSTree tree2){
+  if (isMergeable(this.root, tree2.root)){
+    Node maxleft = findMax(this.root);
 
-       delete( findMax(this.root) );
+    delete( findMax(this.root) );
+    
+    this.root = mergeWithRoot(this.root, tree2.root,maxleft);
 
-       Node temp = this.root;
-
-       this.root = maxleft;
-       maxleft.parent = null;
-
-       maxleft.left = temp;
-       maxleft.left.parent = maxleft;
-
-
-
-
-       maxleft.right = tree2.root;
-       tree2.root.parent = maxleft;
-
-
-    }else{
-      System.out.println("All nodes in T1 must be smaller than all nodes from T2");
-    }
+  }else{
+    System.out.println("All nodes in T1 must be smaller than all nodes from T2");
   }
+}
 
   // This function is complete, no need to edit
   public void printTree() {
