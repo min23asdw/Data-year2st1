@@ -196,11 +196,12 @@ public class AVLTree extends BTreePrinter{
             }else{
               x.left = null;
             }
-
+            System.out.println("hey it work");
             z.left = y;
             z.right = x;
             x.parent = z;
             y.parent = z;
+            System.out.println("z.left" + z.left.key + "z.right " + z.right.key);
           }
         }
 
@@ -492,20 +493,17 @@ public class AVLTree extends BTreePrinter{
             return t;
         }
         else if (diff > 0) {
-          System.out.println("ll");
-          System.out.println("t " + t.key);
-          System.out.println("r1 " + r1.key);
-          System.out.println("r1 R  " + r1.right.key);
+
             Node temp = mergeWithRoot(r1.right, r2, t);
             r1.right = temp;
             System.out.println("r1.right" + r1.right.key);
             temp.parent = r1;
             AVLTree caller = new AVLTree(r1);
             rebalance(caller , r1);
+            System.out.println("caller.root.left " + caller.root.left.key);
             return caller.root;
         }
         else if (diff < 0) {
-          System.out.println("rrr");
           
             Node temp = mergeWithRoot(r1, r2.left, t);
 
