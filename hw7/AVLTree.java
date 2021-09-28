@@ -169,6 +169,8 @@ public class AVLTree extends BTreePrinter{
     // Do something
     if(y!=null){
       if(y.parent!=null){ // y not root
+        System.out.println("hey y" + y.key);
+        System.out.println("hey y.parent" + y.parent.key);
         Node w =y.parent;
         if(y.right!=null){
           Node x = y.right;
@@ -196,16 +198,17 @@ public class AVLTree extends BTreePrinter{
             }else{
               x.left = null;
             }
-            System.out.println("hey it work");
+           
             z.left = y;
             z.right = x;
             x.parent = z;
             y.parent = z;
-            System.out.println("z.left" + z.left.key + "z.right " + z.right.key);
+            
           }
         }
 
       }else{  // y are root
+        System.out.println("hey it work");
         if(y.right!=null){
           Node x = y.right;
           if(x.left!=null){
@@ -225,11 +228,12 @@ public class AVLTree extends BTreePrinter{
             }else{
               x.left = null;
             }
-
+            
             z.left = y;
             z.right = x;
             y.parent = z;
             x.parent = z;
+            System.out.println("z.left" + z.left.key + "z.right " + z.right.key);
           }
         }
       }
@@ -496,11 +500,14 @@ public class AVLTree extends BTreePrinter{
 
             Node temp = mergeWithRoot(r1.right, r2, t);
             r1.right = temp;
-            System.out.println("r1.right" + r1.right.key);
+
+            // System.out.println("r1 pa" + r1.parent.key);
+            // System.out.println("r1  i" + r1.key);
+            // System.out.println("r1  R" + r1.right.key);
             temp.parent = r1;
             AVLTree caller = new AVLTree(r1);
             rebalance(caller , r1);
-            System.out.println("caller.root.left " + caller.root.left.key);
+           
             return caller.root;
         }
         else if (diff < 0) {
@@ -559,6 +566,10 @@ public class AVLTree extends BTreePrinter{
   }
   else if (key >= r.key) {
     arr = split(r.right, key);
+    System.out.println("r.leftr.left   " + r.left.key);
+    if(key == r.key){
+      r.left.parent = null;
+    }
     arr[0] = mergeWithRoot(r.left,arr[0], r);
     // System.out.println(arr[1].key);
     return arr;
