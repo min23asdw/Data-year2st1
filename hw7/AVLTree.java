@@ -100,8 +100,8 @@ public class AVLTree extends BTreePrinter{
     // Do something
     if(y!=null){
       if(y.parent!=null){  // y not root
-        System.out.println("hey y" + y.key);
-        System.out.println("hey y.parent" + y.parent.key);
+        // System.out.println("hey y" + y.key);
+        // System.out.println("hey y.parent" + y.parent.key);
         Node w = y.parent;
         if(y.left!=null){
           Node x = y.left;
@@ -210,7 +210,7 @@ public class AVLTree extends BTreePrinter{
         }
 
       }else{  // y are root
-        System.out.println("hey it work");
+        // System.out.println("hey it work");
         if(y.right!=null){
           Node x = y.right;
           if(x.left!=null){
@@ -235,7 +235,7 @@ public class AVLTree extends BTreePrinter{
             z.right = x;
             y.parent = z;
             x.parent = z;
-            System.out.println("z.left" + z.left.key + "z.right " + z.right.key);
+            // System.out.println("z.left" + z.left.key + "z.right " + z.right.key);
           }
         }
       }
@@ -243,8 +243,9 @@ public class AVLTree extends BTreePrinter{
   }
 
   public static void rebalance(AVLTree tree, Node node){
+    if(node == null){return;}
     Node current = node;
-    int balanceFactor = Math.abs(height(current.left)-height(current.right));              // Calculate balanceFactor
+    // int balanceFactor = 0;// Calculate balanceFactor
     
 
     while(current.parent!=null){
@@ -254,7 +255,7 @@ public class AVLTree extends BTreePrinter{
       current = current.parent;
     }
 
-    if ( balanceFactor > 1 ){                          // if diff more 1  =  unbalanced
+    if ( Math.abs(height(current.left)-height(current.right))   > 1 ){                          // if diff more 1  =  unbalanced
 
       if (   height(current.left) > height(current.right)    ) {                      //left heavy
         if (height(current.left.left)>height(current.left.right)){                  // Use the grandchild to check if Outer or Inner?
@@ -333,7 +334,7 @@ public class AVLTree extends BTreePrinter{
 
 
 
-      else if(node == root){          //ตัวที่ลบเป็น root
+      else if(node == root || node.parent == null){          //ตัวที่ลบเป็น root
         if (root.left == null && root.right == null) {  //ใน tree มีแค่ root ตัสเดียว ก็หายไปสิ จะรอไร
           root = null;
         }
@@ -394,13 +395,15 @@ public class AVLTree extends BTreePrinter{
 
 
     }
-
     Node now = node.parent;
-    while(now.parent!=null){
+     
+      while(now!=null){  // ยังไล่ไม่ถึง root
       rebalance(tree, now);
 
       now = now.parent;
     }
+  
+
 
 
   }
@@ -479,17 +482,11 @@ public class AVLTree extends BTreePrinter{
 
 
   public  static Node mergeWithRoot(Node r1, Node r2, Node t){
-    ///////////////////////////////////////////////////////////////////////////// this Fn
-    System.out.println(isMergeable(r1, r2));
     if (r1 == null && r2 == null) {
         return t;
     }
-    // AVLTree caller = new AVLTree(r1);
-
     if (isMergeable(r1, r2)) {
-
         int diff = height(r1) - height(r2);
-
         if (Math.abs(diff) <= 1) {
             t.left = r1;
             t.right = r2;
@@ -498,31 +495,21 @@ public class AVLTree extends BTreePrinter{
             return t;
         }
         else if (diff > 0) {
-          
             Node temp = mergeWithRoot(r1.right, r2, t);
             r1.right = temp;
-
-            // System.out.println("r1 pa" + r1.parent.key);
-            // System.out.println("r1  i" + r1.key);
-            // System.out.println("r1  R" + r1.right.key);
             temp.parent = r1;
             AVLTree caller = new AVLTree(r1);
             rebalance(caller , r1);
-           
             return caller.root;
         }
         else if (diff < 0) {
-              
             Node temp = mergeWithRoot(r1, r2.left, t);
-
             r2.left = temp;
             temp.parent = r2;
             AVLTree caller = new AVLTree(r2);
-            
             rebalance(caller , r2);
             return caller.root;
         }
-
         return t;
     } else {
       return null;
@@ -550,41 +537,25 @@ public class AVLTree extends BTreePrinter{
 
   }
 
-  // Fix this function
   public static Node[] split(Node r, int key){
     Node[] arr = new Node[2];
     if (r == null) {
       arr[0] = null;
-      // if(arr[0]!=null)arr[0].parent =null;
       arr[1] = null;
-      // if(arr[1]!=null)arr[1].parent = null;
       return arr;
   }
   else if (key < r.key) {
-    arr= split(r.left, key);
-    // arr[0].parent =null;
-    // arr[1].parent =null;
-    // r.parent = null;
-if(arr[1]!=null) arr[1].parent = null;
-if(r.right!=null)    r.right.parent = null;
-
-
+       arr= split(r.left, key);
+      if(arr[1]!=null) arr[1].parent = null;
+      if(r.right!=null)    r.right.parent = null;
       arr[1] = mergeWithRoot(arr[1], r.right, r);
-
       return arr;
   }
   else if (key >= r.key) {
     arr = split(r.right, key);
     if(arr[0]!=null) arr[0].parent = null;
     if(r.left!=null)    r.left.parent = null;
-    // r.parent = null;
- 
-    // System.out.println("r.leftr.left   " + r.left.key);
-    // if(r.key== key){
-    //   r.left.parent = null;
-    // }
     arr[0] = mergeWithRoot(r.left,arr[0], r);
-    // System.out.println(arr[1].key);
     return arr;
   }
     return arr;
