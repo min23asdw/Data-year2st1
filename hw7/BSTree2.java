@@ -72,16 +72,17 @@ public class BSTree2 extends BTreePrinter{
             while(curr!=null){
 
                   if(key==curr.key){
-                    //   System.out.println("curr.key" + curr.key);
+                    System.out.println("Duplicated key:" + key);
                     }else if(key<curr.key){
                     
-                     if(curr.left==null){
-                         curr.left = new Node(key);
-                          curr.left.parent = curr;
-                           break;
-                       }
+                        if(curr.left==null){
+                             curr.left = new Node(key);
+                              curr.left.parent = curr;
+                               break;
+                         }
                         curr = curr.left;
-                 }else if(key>curr.key){
+
+                     }else if(key>curr.key){
                       if(curr.right==null){
                             curr.right = new Node(key);
                             curr.right.parent = curr;
@@ -89,8 +90,7 @@ public class BSTree2 extends BTreePrinter{
 
                      }
                         curr = curr.right;
-                  }else{
-                  System.out.println("Duplicated key:" + key);
+
                   }
             }
         }else{
