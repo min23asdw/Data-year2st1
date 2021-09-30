@@ -21,10 +21,10 @@ public class SplayTree extends BTreePrinter{
             System.out.println("Cannot perform Zig operation on the root node");
         }
         else if (y == root){ // If the node is a child of the root
-            if (x.key < y.key){
+            if (x.key < y.key){  // x เป็น left subtree
                 root = x;
                 x.parent = null;
-                if(x.right!=null){
+                if(x.right!=null){   // ถ้า x มีลูกทางฝั่งขวา จะไปผูกกับ  y left subtree
                     y.left =x.right;
                     x.right.parent = y;
                 }else{
@@ -33,10 +33,10 @@ public class SplayTree extends BTreePrinter{
                 x.right = y;
                 y.parent =x;
             }
-            else {
+            else {  // x = right subtree ของ y
                 root = x;
                 x.parent =null;
-                if(x.left!=null){
+                if(x.left!=null){  // ถ้า x มีลูกทางฝั่งซ้าย จะไปผูกกับ  y right subtree
                     y.right = x.left;
                     x.left.parent = y;
                 }else{
@@ -49,7 +49,7 @@ public class SplayTree extends BTreePrinter{
 
 
 
-        else if (y != root) {
+        else if (y != root) { // y is not root
             Node w = y.parent;
             if(w.key > y.key){ // y เป็น left subtree ของ w
                 w.left = x;
@@ -62,7 +62,7 @@ public class SplayTree extends BTreePrinter{
 
             if (x.key < y.key){
  
-                if(x.right!=null){
+                if(x.right!=null){   // ถ้า x มีลูกทางฝั่งขวา จะไปผูกกับ  y left subtree
                     y.left =x.right;
                     x.right.parent = y;
                 }else{
@@ -74,7 +74,7 @@ public class SplayTree extends BTreePrinter{
 
             }
             else {
-                if(x.left!=null){
+                if(x.left!=null){ // ถ้า x มีลูกทางฝั่งซ้าย จะไปผูกกับ  y right subtree
                     y.right = x.left;
                     x.left.parent = y;
                 }else{
@@ -94,7 +94,7 @@ public class SplayTree extends BTreePrinter{
     // zigzig() function will move up node x two levels along the outer path
     // Pls call zig() to perform zigzig()
     public void zigzig(Node x){
-        zig(x.parent);
+        zig(x.parent);  //ฮือ  ฮึบ
         zig(x);
     }
     
@@ -102,14 +102,14 @@ public class SplayTree extends BTreePrinter{
     // zigzag() function will move up node x two levels along the inner path
     // Pls call zig() to perform zigzag()
     public void zigzag(Node x){
-        zig(x);
+        zig(x);  // ฮึบๆ
         zig(x);
     }
     
     // This function will interatively splay (move up) node x all the way to the root
     public void splay(Node x){
         while (x != null && x != root){ // ลากขึ้นไปจนถึง root
-            Node y = x.parent;
+            Node y = x.parent;    
             // y is root just zig x
             if (y == root){
                 zig(x);
@@ -130,23 +130,23 @@ public class SplayTree extends BTreePrinter{
     }
     
     public void insert(int key) {
-        if(root!=null){
+        if(root!=null){ // root มี node อื่นอยู่แลว้
             
-            Node curr = root;
-            while(curr!=null){
+            Node curr = root; // เริ่มจาก root
+            while(curr!=null){  // ไล่ลงตาม subtree ไปเรื่อยๆจนเจอ null
 
                   if(key==curr.key){
-                    System.out.println("Duplicated key:" + key);
-                    }else if(key<curr.key){
+                    System.out.println("Duplicated key:" + key); // มี  node ที่มีค่านี้อยู๋แเล้วว
+                    }else if(key<curr.key){ // ค่าที่จะใส่น้อยว่า node ตอนนี้   = ลงไปทางด้านซ้าย
                     
-                        if(curr.left==null){
+                        if(curr.left==null){ //  ด้านซ้ายของ node นี้ ว่าง 
  
                                break;
                          }
                         curr = curr.left;
 
-                     }else if(key>curr.key){
-                      if(curr.right==null){
+                     }else if(key>curr.key){ // ค่าที่จะใส่มากว่า node ตอนนี้   = ลงไปทางด้านขวา
+                      if(curr.right==null){ //  ด้านขวาของ node นี้ ว่าง 
 
                          break;
 
@@ -156,37 +156,37 @@ public class SplayTree extends BTreePrinter{
                   }
                 }
 
-                  Node temp = new Node(key);
-                  if(key<curr.key){
+                  Node temp = new Node(key);  
+                  if(key<curr.key){  // ลง node ใหม่ที่ตำแน่งนั้น
                     curr.left = temp;
                     temp.parent = curr;
                   }else{
                     curr.right = temp;
                     temp.parent = curr;
                   }
-                  splay(temp);
+                  splay(temp);  // ลาก node.ใหม่ ที่เพิ่ง insert มาที่ root
             
         }else{
-            root = new Node(key);
+            root = new Node(key); // root = null  insert โดย เป็น root 
         }
     }
     
     // Have the splaying feature (if withSplay is true)
     public Node find(int search_key, boolean withSplay){
-        Node curr = root;
+        Node curr = root; // เรืมจาก root
         // loop through tree and compare key till we find the node
-        while (curr != null) {
+        while (curr != null) {   // ลงไปจนกว่าจะตก null
 
-            if (curr.key == search_key) {
+            if (curr.key == search_key) { //เจอก็ return node
                 if (withSplay){ //if true ลากขึ้น root
                 splay(curr); 
                 }
                 return curr;
             }
-            else if (search_key < curr.key) {
+            else if (search_key < curr.key) {  //ค่า ที่่จะหาน้อยกว่า node ตอนนี้ก็ลงไปทาง  node.left
                 curr = curr.left; 
             }
-            else if (search_key > curr.key) {
+            else if (search_key > curr.key) {  //ค่า ที่่จะหามากกว่า node ตอนนี้ก็ลงไปทาง  node.right
                 curr = curr.right;
             }
         }
@@ -199,29 +199,37 @@ public class SplayTree extends BTreePrinter{
     
     public void delete(int key) {
         if (root.left == null && root.right == null && key == root.key) {
-            root = null;
-            return;
+            root = null;  // node ที่จะลบเป็น root และไม่มีลูก   หายไปซธ
+            return;     
         }
 
         
-        splay(find(key, true));
+        splay(find(key, true));    // ลาก  node ที่จะลบ ขึ้นมาเป็น root ก่อน
         //fin min rightsubtree
         Node min = root.right;
-        while (min != null && min.left != null) {
+        while (min != null && min.left != null) {   // หา min ของ lefttree ของ root
             min = min.left;
         }
-        splay(min);
-        root = min;
 
-        root.left = root.left.left;
-        // reattach left subtree to new root
+        splay(min);  // ลาก min ขึ้นมาเป็น root
+        root = min;
+        min.parent = null;
+
+        //node ตัวที่จะลบ จะเป็น leftsubtree ของ min ที่เพิ้งลากขึ้นมาเสมอ
+        if( root.left.left != null ){  // remove by shift
+            root.left = root.left.left;
+        }else{
+            root.left = null; // remove
+        }
+
+        // เชือ่ม parent left subtree
         if (root.left != null) root.left.parent = root;
     }
     
     // This function does not have the splaying feature
     public Node findMin() {
-        Node curr = root;
-        while (curr.left != null) {
+        Node curr = root; // เริ่มจาก root
+        while (curr.left != null) {  // ไล่ลงตาม leftsubtree ไปเรื่อยๆ จนเกือบตก null
             curr = curr.left;
         }
         return curr;
