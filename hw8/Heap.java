@@ -33,42 +33,38 @@ public class Heap {
         node.timestamp = timer; // Stamp the time number to the node
         
         // To do:
+        
+
+
+
         // 1. Push the new node at the end of the array (via back pointer)
+        arr[size] = node;
+
         // 2. Sift (percolate) it up the heap
         //      * Check priority of the current node with its parent
         //      * Swap the current node if the priority is higher than the parent
         //      * Repeat the process until reaching the root or there is no swap (Pls use while loop)
-        // 3. Increase the heap size
-
-        arr[size] = node;
         int index = size;
+         int parentindex ;
+        while(true){
+            parentindex = (int) Math.floor( index/2.00 );
 
-        while(index >= 1){
-            int parentindex = (int) Math.floor( index/2.00 );
+            if(size < 3){break;} // ถ้ามี  node ตัวเดียวใน tree
 
-            if(parentindex <= 1){break;}
+            if(parentindex <=  1){break;}   // ไล่มาจนถึง root
 
 
-            // if(isMinHeap){
-            //     if(arr[index].price <= arr[parentindex].price ){
-            //         swap(index, parentindex);
-            //     }
-
-            // }else{
-            //     if(arr[index].price >= arr[parentindex].price ){
-            //         swap(index, parentindex);
-            //     }
-                
-            // }
-
-              if(arr[index].compare(arr[parentindex]) ){
+              if( arr[index].compare(arr[parentindex])  ){  // มีตัว index ซึ่งอยู่ท้ายของ array มี  priority มากกว่า parent ของมัน   จึงควรก่อน  จึงต้อง swap
                     swap(index, parentindex);
+                }else{
+                    break;
                 }
 
             index = parentindex;
             
         }
-
+        
+        // 3. Increase the heap size
         size ++;
         
 
@@ -78,77 +74,56 @@ public class Heap {
     public Node pop(){
         
         // To do:
+    
+        
         // 1. Mark the root for return (Don't forget to return this node)
+        Node hightpriority  = arr[1];
+
         // 2. Move the last node to the root (change pointer, set null)
+        arr[1] = arr[size-1];
+        arr[size-1] = null;
+    
         // 3. Decrease the heap size
+        size--;
+
+        int index = 1;
+        int childindex ;
+        
         // 4. Sift (percolate) it down the heap
         //      * Check priority of the current node with both children
         //      * Swap the current node with the lower priority child
         //      * Repeat the process until the node has no child or there is no swap (Pls use while loop)
-        Node hightpriority  = arr[1];
+        while(true){
+             childindex =  index * 2 ;
 
-        arr[1] = arr[size-1];
-        arr[size-1] = null;
+             if(size <3){break;} // ถ้ามี  node ตัวเดียวใน tree
+            if(childindex > size){break;}   // ไล่จนเลยจากจำนวน node ใน tree
 
-        
-        int index =1;
-        while(index <= size-1){
-            int childindex =  index * 2 ;
+          
 
-            if(childindex >= size-1){break;}
-
-            // if(isMinHeap){ // ตัวเบาควรอยู่บน
-            //     if(arr[index].price >= arr[childindex].price){    // มีลูกเบากว่า
-
-            //         if(arr[childindex+1]!= null){
-
-            //             if(arr[childindex].price < arr[childindex+1].price){  // ลูกที่เบากว่า จะต้องขึ้นมา
-            //                 swap(index, childindex); 
-            //             }else{
-            //                 swap(index, childindex+1);
-            //             }
-
-            //         }else{
-            //             swap(index, childindex); 
-            //         }
-
-
-            //     }
-
-            // }else{ // ตัวหนักควรอยู่บน
-            //     if(arr[index].price <= arr[childindex].price || arr[index].price <= arr[childindex+1].price){    // มีลูกหนักกว่า
-
-            //         if(arr[childindex+1]!= null){
-
-            //             if(arr[childindex].price > arr[childindex+1].price){  // ลูกที่เบากว่า จะต้องขึ้นมา
-            //                 swap(index, childindex); 
-            //             }else{
-            //                 swap(index, childindex+1);
-            //             }
-
-            //         }else{
-            //             swap(index, childindex); 
-            //         }
-
-            //     }
-            // }
-
-            if(arr[index].compare(arr[childindex]) || arr[index].compare(arr[childindex+1]) ){
-                if(arr[childindex].compare(arr[childindex+1])){
+            if( arr[childindex].compare(arr[index]) || arr[childindex+1].compare(arr[ index]) ){ // มีลูก ซึ่งมี  priority ที่ควรออกก่อน  จึงต้อง swap
+                if(arr[childindex+1]!=null){   // มีลูกที่ 2k+1 ด้วย 
+                      if(arr[childindex].compare(arr[childindex+1])){ // 2k  มี  priority  มากกว่า
+                      swap(index, childindex);
+                       index = childindex;
+                    }else{
+                      swap(index, childindex+1); // 2k+1  มี  priority  มากกว่า
+                      index = childindex+1;
+                     }
+                    
+                }else{  // สลับ k   กับ 2k
                     swap(index, childindex);
-                }else{
-
-                    swap(index, childindex+1);
+                    index = childindex;
                 }
-            
-            }
 
-            index = childindex;
-           
+            
+            }else{
+                break;
+            }
 
             
         }
-        size--;
+        
 
         return hightpriority; // FIX THIS
 
