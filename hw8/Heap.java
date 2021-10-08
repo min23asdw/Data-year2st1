@@ -102,14 +102,14 @@ public class Heap {
             }  
 
             if (childindex + 1 < size) { // มีลูกที่ 2k+1 ด้วย
-                if (arr[childindex + 1].compare(arr[childindex])) { // ด้านซ้าย ซึ่งมี priority ที่ควรอจึงต้
+                if (arr[childindex + 1].compare(arr[childindex])) { // ด้านขวา ซึ่งมี priority  มากกว่า จะเปลี่ยนเป็นสลับกับ ลูกขวา
                     childindex = childindex + 1;
                 }
             }
 
             if (arr[childindex].compare(arr[index])) { // มีลูก ซึ่งมี priority ที่ควรออกก่อน จึงต้อง swap
                 if (arr[childindex].compare(arr[index])) { // ลูก มี priority มากกว่า
-                    swap(index, childindex); // สลับ k กับ 2k
+                    swap(index, childindex); // สลับ k กับ ลูกที่มี priority มากกว่า
                     index = childindex;
                     childindex = index * 2;
                 } else {
