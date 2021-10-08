@@ -45,22 +45,23 @@ public class Heap {
         //      * Swap the current node if the priority is higher than the parent
         //      * Repeat the process until reaching the root or there is no swap (Pls use while loop)
         int index = size;
-         int parentindex ;
+         int parentindex = (int) Math.floor( index/2.00 );
         while(true){
-            parentindex = (int) Math.floor( index/2.00 );
+            
 
-            if(size < 3){break;} // ถ้ามี  node ตัวเดียวใน tree
+            if(size+1 < 3){break;} // ถ้ามี  node ตัวเดียวใน tree
 
-            if(parentindex <=  1){break;}   // ไล่มาจนถึง root
+            if(parentindex <  1){break;}   // ไล่มาจนถึง root
 
 
               if( arr[index].compare(arr[parentindex])  ){  // มีตัว index ซึ่งอยู่ท้ายของ array มี  priority มากกว่า parent ของมัน   จึงควรก่อน  จึงต้อง swap
                     swap(index, parentindex);
+                    index = parentindex;
+                    parentindex = index /2;
                 }else{
                     break;
                 }
 
-            index = parentindex;
             
         }
         
@@ -87,14 +88,13 @@ public class Heap {
         size--;
 
         int index = 1;
-        int childindex ;
+        int childindex = index * 2 ;
         
         // 4. Sift (percolate) it down the heap
         //      * Check priority of the current node with both children
         //      * Swap the current node with the lower priority child
         //      * Repeat the process until the node has no child or there is no swap (Pls use while loop)
         while(true){
-             childindex =  index * 2 ;
 
              if(size <3){break;} // ถ้ามี  node ตัวเดียวใน tree
             if(childindex > size){break;}   // ไล่จนเลยจากจำนวน node ใน tree
@@ -115,8 +115,8 @@ public class Heap {
                     swap(index, childindex);
                     index = childindex;
                 }
-
-            
+                    
+            childindex = index * 2;
             }else{
                 break;
             }
