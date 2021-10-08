@@ -100,34 +100,32 @@ public class Heap {
             if(childindex > size){break;}   // ไล่จนเลยจากจำนวน node ใน tree
 
           
-
+         if(arr[childindex+1]!=null){  // มีลูกที่ 2k+1 ด้วย 
             if( arr[childindex].compare(arr[index]) || arr[childindex+1].compare(arr[ index]) ){ // มีลูก ซึ่งมี  priority ที่ควรออกก่อน  จึงต้อง swap
-                if(arr[childindex+1]!=null){   // มีลูกที่ 2k+1 ด้วย 
-                      if(arr[childindex].compare(arr[childindex+1])){ // 2k  มี  priority  มากกว่า
-                      swap(index, childindex);
+                     if(arr[childindex].compare(arr[childindex+1])){ // 2k  มี  priority  มากกว่า
+                      swap(index, childindex); // สลับ k   กับ 2k
                        index = childindex;
                     }else{
                       swap(index, childindex+1); // 2k+1  มี  priority  มากกว่า
                       index = childindex+1;
-                     }
-                    
-                }else{  // สลับ k   กับ 2k
-                    swap(index, childindex);
-                    index = childindex;
-                }
+                    }
                     
             childindex = index * 2;
             }else{
                 break;
             }
-
             
+        }else if(arr[childindex].compare(arr[index])){
+            swap(index, childindex); // สลับ k   กับ 2k
+            index = childindex;
         }
+    }
         
 
         return hightpriority; // FIX THIS
 
     }
+    
 
     // This is an optional function, you may use it if you know what it is
     // This function is complete, no need to edit
