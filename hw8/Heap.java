@@ -88,10 +88,10 @@ public class Heap {
 
         
         int index =1;
-        while(index <= size){
+        while(index <= size-1){
             int childindex =  index * 2 ;
 
-            if(childindex > size){break;}
+            if(childindex >= size-1){break;}
 
             if(isMinHeap){ // ตัวเบาควรอยู่บน
                 if(arr[index].price >= arr[childindex].price){    // มีลูกเบากว่า
