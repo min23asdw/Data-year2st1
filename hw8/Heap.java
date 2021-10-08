@@ -49,17 +49,21 @@ public class Heap {
             if(parentindex <= 1){break;}
 
 
-            if(isMinHeap){
-                if(arr[index].price <= arr[parentindex].price ){
-                    swap(index, parentindex);
-                }
+            // if(isMinHeap){
+            //     if(arr[index].price <= arr[parentindex].price ){
+            //         swap(index, parentindex);
+            //     }
 
-            }else{
-                if(arr[index].price >= arr[parentindex].price ){
+            // }else{
+            //     if(arr[index].price >= arr[parentindex].price ){
+            //         swap(index, parentindex);
+            //     }
+                
+            // }
+
+              if(arr[index].compare(arr[parentindex]) ){
                     swap(index, parentindex);
                 }
-                
-            }
 
             index = parentindex;
             
@@ -83,8 +87,8 @@ public class Heap {
         //      * Repeat the process until the node has no child or there is no swap (Pls use while loop)
         Node hightpriority  = arr[1];
 
-        arr[1] = arr[size];
-        arr[size] = null;
+        arr[1] = arr[size-1];
+        arr[size-1] = null;
 
         
         int index =1;
@@ -93,40 +97,50 @@ public class Heap {
 
             if(childindex >= size-1){break;}
 
-            if(isMinHeap){ // ตัวเบาควรอยู่บน
-                if(arr[index].price >= arr[childindex].price){    // มีลูกเบากว่า
+            // if(isMinHeap){ // ตัวเบาควรอยู่บน
+            //     if(arr[index].price >= arr[childindex].price){    // มีลูกเบากว่า
 
-                    if(arr[childindex+1]!= null){
+            //         if(arr[childindex+1]!= null){
 
-                        if(arr[childindex].price < arr[childindex+1].price){  // ลูกที่เบากว่า จะต้องขึ้นมา
-                            swap(index, childindex); 
-                        }else{
-                            swap(index, childindex+1);
-                        }
+            //             if(arr[childindex].price < arr[childindex+1].price){  // ลูกที่เบากว่า จะต้องขึ้นมา
+            //                 swap(index, childindex); 
+            //             }else{
+            //                 swap(index, childindex+1);
+            //             }
 
-                    }else{
-                        swap(index, childindex); 
-                    }
+            //         }else{
+            //             swap(index, childindex); 
+            //         }
 
 
+            //     }
+
+            // }else{ // ตัวหนักควรอยู่บน
+            //     if(arr[index].price <= arr[childindex].price || arr[index].price <= arr[childindex+1].price){    // มีลูกหนักกว่า
+
+            //         if(arr[childindex+1]!= null){
+
+            //             if(arr[childindex].price > arr[childindex+1].price){  // ลูกที่เบากว่า จะต้องขึ้นมา
+            //                 swap(index, childindex); 
+            //             }else{
+            //                 swap(index, childindex+1);
+            //             }
+
+            //         }else{
+            //             swap(index, childindex); 
+            //         }
+
+            //     }
+            // }
+
+            if(arr[index].compare(arr[childindex]) || arr[index].compare(arr[childindex+1]) ){
+                if(arr[childindex].compare(arr[childindex+1])){
+                    swap(index, childindex);
+                }else{
+
+                    swap(index, childindex+1);
                 }
-
-            }else{ // ตัวหนักควรอยู่บน
-                if(arr[index].price <= arr[childindex].price || arr[index].price <= arr[childindex+1].price){    // มีลูกหนักกว่า
-
-                    if(arr[childindex+1]!= null){
-
-                        if(arr[childindex].price > arr[childindex+1].price){  // ลูกที่เบากว่า จะต้องขึ้นมา
-                            swap(index, childindex); 
-                        }else{
-                            swap(index, childindex+1);
-                        }
-
-                    }else{
-                        swap(index, childindex); 
-                    }
-
-                }
+            
             }
 
             index = childindex;
